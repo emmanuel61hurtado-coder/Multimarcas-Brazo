@@ -15,25 +15,25 @@
     {% if items %}
     <div class="row g-4">
         <div class="col-lg-8">
-            <div class="card-brazo p-4 shadow-sm" style="border-radius: 20px;">
+            <div class="card-brazo p-3 p-md-4 shadow-sm" style="border-radius: 20px;">
                 <div class="cart-items-list">
                     {% for item in items %}
-                    <div class="d-flex align-items-center justify-content-between p-3 mb-3 rounded bg-dark bg-opacity-50 border border-secondary border-opacity-10 position-relative">
-                        <div class="flex-grow-1">
-                            <div style="font-weight: 700; color: var(--white); font-size: 1.1rem;">{{ item.repuesto.nombre }}</div>
+                    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between p-3 mb-3 rounded bg-dark bg-opacity-50 border border-secondary border-opacity-10 position-relative">
+                        <div class="flex-grow-1 w-100 w-sm-auto mb-2 mb-sm-0">
+                            <div style="font-weight: 700; color: var(--white); font-size: 1rem;">{{ item.repuesto.nombre }}</div>
                             <small class="text-muted d-block">{{ item.repuesto.marca }}</small>
-                            <div class="mt-2 d-flex align-items-center gap-3">
+                            <div class="mt-2 d-flex align-items-center gap-3 flex-wrap">
                                 <div class="d-flex align-items-center gap-2">
-                                    <a href="{{ url_for('carrito.cambiar_cantidad', rid=item.repuesto.id, accion='menos') }}" class="btn btn-sm btn-outline-secondary" style="width:25px; height:25px; padding:0; line-height:23px; font-size: 12px;">−</a>
-                                    <span style="font-weight: 800; font-size: 1rem; min-width: 20px; text-align: center;">{{ item.cantidad }}</span>
-                                    <a href="{{ url_for('carrito.cambiar_cantidad', rid=item.repuesto.id, accion='mas') }}" class="btn btn-sm btn-outline-light" style="width:25px; height:25px; padding:0; line-height:23px; font-size: 12px;">+</a>
+                                    <a href="{{ url_for('carrito.cambiar_cantidad', rid=item.repuesto.id, accion='menos') }}" class="btn btn-sm btn-outline-secondary" style="width:28px; height:28px; padding:0; line-height:26px; font-size: 14px;">−</a>
+                                    <span style="font-weight: 800; font-size: 1rem; min-width: 24px; text-align: center;">{{ item.cantidad }}</span>
+                                    <a href="{{ url_for('carrito.cambiar_cantidad', rid=item.repuesto.id, accion='mas') }}" class="btn btn-sm btn-outline-light" style="width:28px; height:28px; padding:0; line-height:26px; font-size: 14px;">+</a>
                                 </div>
-                                <div class="text-muted small">x $ {{ "{:,.0f}".format(item.repuesto.precio) }}</div>
+                                <span class="text-muted small">x $ {{ "{:,.0f}".format(item.repuesto.precio) }}</span>
                             </div>
                         </div>
-                        <div class="text-end">
-                            <div style="font-weight: 900; color: var(--accent); font-size: 1.2rem;">$ {{ "{:,.0f}".format(item.subtotal) }}</div>
-                            <a href="{{ url_for('carrito.eliminar', rid=item.repuesto.id) }}" class="text-danger mt-2 d-inline-block" title="Eliminar">
+                        <div class="d-flex flex-row flex-sm-column align-items-center align-items-sm-end justify-content-between w-100 w-sm-auto gap-2 gap-sm-0">
+                            <div style="font-weight: 900; color: var(--accent); font-size: 1.1rem;">$ {{ "{:,.0f}".format(item.subtotal) }}</div>
+                            <a href="{{ url_for('carrito.eliminar', rid=item.repuesto.id) }}" class="text-danger" title="Eliminar">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         </div>
@@ -49,8 +49,8 @@
         </div>
         
         <div class="col-lg-4">
-            <form action="{{ url_for('carrito.checkout') }}" method="POST" class="card-brazo p-4 shadow-sm" style="border-radius: 20px; border-top: 5px solid var(--red);">
-                <h4 class="mb-4" style="font-family: var(--font-display); font-weight: 900; font-style: italic;">RESUMEN Y ENTREGA</h4>
+            <form action="{{ url_for('carrito.checkout') }}" method="POST" class="card-brazo p-3 p-md-4 shadow-sm" style="border-radius: 20px; border-top: 5px solid var(--red);">
+                <h4 class="mb-4" style="font-family: var(--font-display); font-weight: 900; font-style: italic; font-size: clamp(16px, 4vw, 22px);">RESUMEN Y ENTREGA</h4>
                 
                 <div class="mb-4">
                     <label class="form-label-brazo d-block mb-3">¿Cómo quieres recibirlo?</label>
@@ -58,7 +58,7 @@
                     <div class="form-check mb-3 p-2 border rounded" style="border-color: rgba(255,255,255,0.1) !important;">
                         <input class="form-check-input ms-0" type="radio" name="metodo_entrega" id="metodoTaller" value="Taller" checked onchange="toggleDireccionCart()">
                         <label class="form-check-label ms-2" for="metodoTaller">
-                            <span style="font-weight: 700;">🏠 Comprar en el taller</span><br>
+                            <span style="font-weight: 700; font-size: clamp(13px, 3vw, 15px);">🏠 Comprar en el taller</span><br>
                             <small class="text-muted">Retiras personalmente.</small>
                         </label>
                     </div>
@@ -66,7 +66,7 @@
                     <div class="form-check mb-3 p-2 border rounded" style="border-color: rgba(255,255,255,0.1) !important;">
                         <input class="form-check-input ms-0" type="radio" name="metodo_entrega" id="metodoEnvio" value="Envío" onchange="toggleDireccionCart()">
                         <label class="form-check-label ms-2" for="metodoEnvio">
-                            <span style="font-weight: 700;">🚚 Envío a domicilio</span><br>
+                            <span style="font-weight: 700; font-size: clamp(13px, 3vw, 15px);">🚚 Envío a domicilio</span><br>
                             <small class="text-muted">Flete contraentrega.</small>
                         </label>
                     </div>
@@ -86,15 +86,15 @@
                 <hr style="border-color: var(--border);">
                 
                 <div class="d-flex justify-content-between mb-4">
-                    <span style="font-weight: 700; font-size: 1.2rem;">TOTAL PRODUCTOS</span>
-                    <span style="font-weight: 900; font-size: 1.5rem; color: var(--accent);">$ {{ "{:,.0f}".format(total) }}</span>
+                    <span style="font-weight: 700; font-size: clamp(14px, 3vw, 18px);">TOTAL</span>
+                    <span style="font-weight: 900; font-size: clamp(18px, 4vw, 24px); color: var(--accent);">$ {{ "{:,.0f}".format(total) }}</span>
                 </div>
                 
-                <div class="alert alert-warning p-2" style="font-size: 0.8rem; border-radius: 10px;">
+                <div class="alert alert-warning p-2" style="font-size: 0.75rem; border-radius: 10px;">
                     <i class="fas fa-handshake"></i> El pago se coordina manualmente tras realizar el pedido.
                 </div>
 
-                <button type="submit" class="btn-primary-brazo w-100 py-3" style="font-size: 1.1rem; border-radius: 50px;">
+                <button type="submit" class="btn-primary-brazo w-100 py-2 py-md-3" style="font-size: clamp(14px, 3vw, 18px); justify-content:center;">
                     🏁 Confirmar Pedido
                 </button>
             </form>

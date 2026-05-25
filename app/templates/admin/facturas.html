@@ -153,7 +153,8 @@
                         <p class="mb-1"><strong>{{ f.user.nombre_completo }}</strong><br>CC: {{ f.user.username }}</p>
                     </div>
                 </div>
-                <table class="table table-dark table-sm">
+                <div class="table-responsive">
+                <table class="table table-dark table-sm mb-0">
                     <thead>
                         <tr class="text-muted" style="font-size: 11px;">
                             <th>DESCRIPCIÓN</th>
@@ -165,30 +166,31 @@
                     <tbody>
                         {% for item in f.items %}
                         <tr style="font-size: 13px;">
-                            <td>{{ item.descripcion }}</td>
-                            <td class="text-center">{{ item.cantidad }}</td>
-                            <td class="text-end">$ {{ "{:,.2f}".format(item.precio_unitario) }}</td>
-                            <td class="text-end">$ {{ "{:,.2f}".format(item.subtotal) }}</td>
+                            <td data-label="DESCRIPCIÓN">{{ item.descripcion }}</td>
+                            <td data-label="CANT." class="text-center">{{ item.cantidad }}</td>
+                            <td data-label="P. UNIT" class="text-end">$ {{ "{:,.2f}".format(item.precio_unitario) }}</td>
+                            <td data-label="SUBTOTAL" class="text-end">$ {{ "{:,.2f}".format(item.subtotal) }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                </div>
 
                 <div class="row mt-4">
-                    <div class="col-8">
-                        <p class="text-muted small"><strong>MÉTODO DE PAGO:</strong> {{ f.metodo_pago | upper }}</p>
+                    <div class="col-sm-8 mb-3 mb-sm-0">
+                        <p class="text-muted small mb-0"><strong>MÉTODO DE PAGO:</strong> {{ f.metodo_pago | upper }}</p>
                     </div>
-                    <div class="col-4 text-end">
+                    <div class="col-sm-4">
                         <div class="d-flex justify-content-between mb-1">
-                            <span class="text-muted">REPUESTOS:</span>
-                            <span>$ {{ "{:,.2f}".format(f.subtotal - (f.items[0].precio_unitario if (f.items|length > 0) and ("Mano de Obra" in f.items[0].descripcion) else 0)) }}</span>
+                            <span class="text-muted small">REPUESTOS:</span>
+                            <span class="small">$ {{ "{:,.2f}".format(f.subtotal - (f.items[0].precio_unitario if (f.items|length > 0) and ("Mano de Obra" in f.items[0].descripcion) else 0)) }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-1">
-                            <span class="text-muted">VALOR TRABAJO:</span>
-                            <span>$ {{ "{:,.2f}".format(f.items[0].precio_unitario if (f.items|length > 0) and ("Mano de Obra" in f.items[0].descripcion) else 0) }}</span>
+                            <span class="text-muted small">VALOR TRABAJO:</span>
+                            <span class="small">$ {{ "{:,.2f}".format(f.items[0].precio_unitario if (f.items|length > 0) and ("Mano de Obra" in f.items[0].descripcion) else 0) }}</span>
                         </div>
                         <div class="d-flex justify-content-between border-top pt-2"
-                            style="font-size: 18px; font-weight: 900; color: #00ff88;">
+                            style="font-size: clamp(14px, 4vw, 18px); font-weight: 900; color: #00ff88;">
                             <span>TOTAL:</span>
                             <span>$ {{ "{:,.2f}".format(f.total) }}</span>
                         </div>

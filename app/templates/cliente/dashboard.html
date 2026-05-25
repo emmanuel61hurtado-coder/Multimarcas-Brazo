@@ -116,6 +116,30 @@
     .btn-citas:hover { box-shadow: -15px 15px 30px rgba(59, 130, 246, 0.4); }
     .btn-historial:hover { box-shadow: -15px 15px 30px rgba(16, 185, 129, 0.4); }
 
+    @media (max-width: 767px) {
+        .client-title { font-size: clamp(24px, 6vw, 36px); text-shadow: 2px 2px 0 var(--red); }
+        .client-subtitle { font-size: 14px; letter-spacing: 3px; }
+        .dashboard-container { padding-top: 60px; }
+        .client-dash-btn { flex: 0 1 100%; padding: 20px; }
+        .client-dash-btn i { font-size: 24px; }
+        .client-btn-title { font-size: 18px; }
+        .menu-grid { gap: 16px; }
+        .client-dash-btn:hover { transform: none !important; }
+    }
+    @media (max-width: 575px) {
+        .client-title { font-size: clamp(20px, 7vw, 28px); }
+        .client-subtitle { font-size: 12px; }
+        .dashboard-container { padding-top: 40px; }
+        .client-dash-btn { flex: 0 1 100%; padding: 14px; gap: 12px; transform: skewX(-5deg); }
+        .client-dash-btn i { font-size: 20px; }
+        .client-btn-title { font-size: 15px; }
+        .client-btn-desc { font-size: 11px; }
+        .menu-grid { gap: 12px; }
+    }
+    @media (max-width: 399px) {
+        .client-title { font-size: 18px; }
+    }
+
 </style>
 {% endblock %}
 

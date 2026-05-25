@@ -233,10 +233,40 @@
             box-shadow: 0 0 40px rgba(255,255,255,0.2);
         }
 
-        @media (max-width: 1100px) {
-            .telemetry-panel { display: none; }
-            .logo-ring-wrap { width: 300px; height: 300px; }
+        @media (max-width: 1199px) {
+            .side-image-card { width: 260px; height: 380px; }
+            .panel-left { left: 20px; }
+            .panel-right { right: 20px; }
+        }
+
+        @media (max-width: 991px) {
+            .side-image-card { display: none; }
+            .logo-ring-wrap { width: 320px; height: 320px; }
             .welcome-logo { width: 280px; }
+            .command-center { flex-direction: column; gap: 16px; align-items: center; }
+            .btn-hud { padding: 18px 40px; font-size: 16px; letter-spacing: 3px; transform: rotateX(10deg); }
+            .btn-hud:hover { transform: rotateX(0deg) translateY(-5px); }
+            .hud-core { gap: 24px; }
+        }
+
+        @media (max-width: 575px) {
+            .logo-ring-wrap { width: 220px; height: 220px; }
+            .welcome-logo { width: 200px; }
+            .ring-1 { border-width: 1px; }
+            .ring-2 { border-width: 1px; }
+            .ring-3 { border-width: 1px; border-style: dotted; }
+            .btn-hud { padding: 14px 28px; font-size: 13px; letter-spacing: 2px; transform: rotateX(5deg); box-shadow: 0 6px 0 var(--red), 0 12px 24px rgba(0,0,0,0.5); }
+            .btn-hud.secondary { box-shadow: 0 6px 0 var(--accent), 0 12px 24px rgba(0,0,0,0.5); }
+            .btn-hud:hover { transform: rotateX(0deg) translateY(-3px); }
+            .command-center { gap: 12px; }
+            .hud-core { gap: 16px; }
+            .scanline { height: 3px; }
+        }
+
+        @media (max-width: 399px) {
+            .logo-ring-wrap { width: 160px; height: 160px; }
+            .welcome-logo { width: 150px; }
+            .btn-hud { padding: 10px 20px; font-size: 11px; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
