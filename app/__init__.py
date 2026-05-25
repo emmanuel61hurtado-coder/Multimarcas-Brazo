@@ -115,4 +115,25 @@ def create_app():
             db.session.add(admin)
             db.session.commit()
 
+        # Autoseed de repuestos
+        from app.models.repuesto import Repuesto
+        try:
+            if Repuesto.query.count() == 0:
+                print("[INFO] El inventario de repuestos está vacío. Iniciando autoseed...")
+                from app.utils.repuestos_seed_data import repuestos_data
+                for nombre, cat, marca, precio, stock, desc in repuestos_data:
+                    nuevo = Repuesto(
+                        nombre=nombre,
+                        categoria=cat,
+                        marca=marca,
+                        precio=precio,
+                        stock=stock,
+                        descripcion=desc
+                    )
+                    db.session.add(nuevo)
+                db.session.commit()
+                print(f"[OK] Se sembraron {len(repuestos_data)} repuestos automáticamente.")
+        except Exception as e:
+            print(f"[ERROR] No se pudo sembrar los repuestos: {str(e)}")
+
     return app
