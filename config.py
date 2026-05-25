@@ -38,3 +38,11 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER', 'noreply@brazo.com')
+
+    # --- Administrador por defecto ---
+    ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
+    ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@brazo.com')
+    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
+
+    # --- Seguridad ---
+    PASSWORD_RESET_SALT = os.environ.get('PASSWORD_RESET_SALT', 'password-reset-salt')

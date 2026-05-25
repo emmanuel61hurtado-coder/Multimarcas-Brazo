@@ -96,16 +96,20 @@ def create_app():
                     print("[FATAL] No se pudo conectar a la base de datos después de todos los intentos.")
                     raise
 
-        admin = User.query.filter_by(username='admin').first()
+        admin_username = app.config.get('ADMIN_USERNAME', 'admin')
+        admin_email = app.config.get('ADMIN_EMAIL', 'admin@brazo.com')
+        admin_password = app.config.get('ADMIN_PASSWORD', 'admin123')
+
+        admin = User.query.filter_by(username=admin_username).first()
 
         if not admin:
             admin = User(
                 nombre_completo='Administrador',
-                username='admin',
-                email='admin@brazo.com',
+                username=admin_username,
+                email=admin_email,
                 telefono='0000000000',
                 rol='admin',
-                password=generate_password_hash('admin123'),
+                password=generate_password_hash(admin_password),
                 activo=True
             )
             db.session.add(admin)
