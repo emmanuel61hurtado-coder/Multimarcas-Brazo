@@ -8,23 +8,21 @@ function getShareText() {
     return 'Mirá esto de Multimarcas Brazo: ' + document.title;
 }
 
-function toggleSharePanel() {
-    var panel = document.getElementById('sharePanel');
-    var trigger = document.getElementById('shareTrigger');
-    panel.classList.toggle('show');
-    trigger.classList.toggle('active');
+function closeShareModal() {
+    var modal = bootstrap.Modal.getInstance(document.getElementById('shareModal'));
+    if (modal) modal.hide();
 }
 
 function shareFacebook() {
     var url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(getShareURL());
     window.open(url, '_blank', 'width=600,height=400');
-    closeSharePanel();
+    closeShareModal();
 }
 
 function shareWhatsApp() {
     var url = 'https://wa.me/?text=' + encodeURIComponent(getShareText() + ' ' + getShareURL());
     window.open(url, '_blank');
-    closeSharePanel();
+    closeShareModal();
 }
 
 function shareInstagram() {
@@ -36,13 +34,8 @@ function shareInstagram() {
         }).catch(function() {});
     } else {
         copyLink();
-        var btn = document.querySelector('.share-option[onclick="shareInstagram()"] span');
-        if (btn) btn.textContent = 'Link copiado';
-        setTimeout(function() {
-            if (btn) btn.textContent = 'Instagram';
-        }, 2000);
     }
-    closeSharePanel();
+    closeShareModal();
 }
 
 function copyLink() {
@@ -56,7 +49,7 @@ function copyLink() {
     } else {
         fallbackCopy(url);
     }
-    closeSharePanel();
+    closeShareModal();
 }
 
 function fallbackCopy(text) {
@@ -99,21 +92,16 @@ function toggleQR() {
     }
 }
 
-function closeSharePanel() {
-    var panel = document.getElementById('sharePanel');
-    var trigger = document.getElementById('shareTrigger');
-    panel.classList.remove('show');
-    trigger.classList.remove('active');
-}
-
-document.addEventListener('click', function(e) {
-    var float = document.getElementById('shareFloat');
-    if (float && !float.contains(e.target)) {
-        var panel = document.getElementById('sharePanel');
-        var trigger = document.getElementById('shareTrigger');
-        if (panel && panel.classList.contains('show')) {
-            panel.classList.remove('show');
-            trigger.classList.remove('active');
-        }
+// Reset QR on modal close
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('shareModal');
+    if (modal) {
+        modal.addEventListener('hidden.bs.modal', function() {
+            var section = document.getElementById('qrSection');
+            if (section) section.classList.add('d-none');
+            var qr = document.getElementById('qrcode');
+            if (qr) qr.innerHTML = '';
+            shareQRGenerated = false;
+        });
     }
 });
