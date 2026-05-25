@@ -1,7 +1,5 @@
 from itsdangerous import URLSafeTimedSerializer
-from flask_mail import Message
-from flask import current_app, render_template, url_for
-from app import mail
+from flask import current_app
 
 def get_reset_token(user_id, expires_sec=1800):
     """Genera un token seguro que expira en 30 minutos (1800 seg)"""

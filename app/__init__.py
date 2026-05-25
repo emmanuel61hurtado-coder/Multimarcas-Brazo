@@ -70,6 +70,18 @@ def create_app():
         for intento in range(1, max_retries + 1):
             try:
                 db.create_all()
+                # Migrar columnas nuevas si no existen
+                try:
+                    from sqlalchemy import inspect
+                    insp = inspect(db.engine)
+                    cols = [c['name'] for c in insp.get_columns('users')]
+                    if 'pregunta_seguridad' not in cols:
+                        db.session.execute(db.text('ALTER TABLE users ADD COLUMN pregunta_seguridad VARCHAR(200)'))
+                    if 'respuesta_seguridad' not in cols:
+                        db.session.execute(db.text('ALTER TABLE users ADD COLUMN respuesta_seguridad VARCHAR(200)'))
+                    db.session.commit()
+                except Exception:
+                    pass  # Tabla 'users' puede no existir aún en fresh DB
                 print(f"[OK] Conexión a la base de datos exitosa (intento {intento})")
                 break
             except Exception as e:
