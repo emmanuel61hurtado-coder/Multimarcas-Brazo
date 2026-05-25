@@ -1,0 +1,43 @@
+<div class="share-float" id="shareFloat">
+    <button class="share-trigger" onclick="toggleSharePanel()" title="Compartir página" id="shareTrigger">
+        <i class="fas fa-share-alt"></i>
+    </button>
+    <div class="share-panel" id="sharePanel">
+        <div class="share-panel-header">
+            <span class="share-panel-title">COMPARTIR</span>
+            <button class="share-close" onclick="toggleSharePanel()">&times;</button>
+        </div>
+        <div class="share-panel-body">
+            <div class="share-grid">
+                <button class="share-option" onclick="shareFacebook()" title="Compartir en Facebook">
+                    <div class="share-icon facebook"><i class="fab fa-facebook-f"></i></div>
+                    <span>Facebook</span>
+                </button>
+                <button class="share-option" onclick="shareWhatsApp()" title="Compartir en WhatsApp">
+                    <div class="share-icon whatsapp"><i class="fab fa-whatsapp"></i></div>
+                    <span>WhatsApp</span>
+                </button>
+                <button class="share-option" onclick="shareInstagram()" title="Compartir en Instagram">
+                    <div class="share-icon instagram"><i class="fab fa-instagram"></i></div>
+                    <span>Instagram</span>
+                </button>
+                <button class="share-option" onclick="copyLink()" title="Copiar enlace">
+                    <div class="share-icon link"><i class="fas fa-link"></i></div>
+                    <span>Copiar Link</span>
+                </button>
+                <button class="share-option" onclick="toggleQR()" title="Ver código QR">
+                    <div class="share-icon qr"><i class="fas fa-qrcode"></i></div>
+                    <span>Código QR</span>
+                </button>
+            </div>
+            <div class="qr-section d-none" id="qrSection">
+                <hr class="border-secondary opacity-25">
+                <p class="small text-muted mb-2 text-center">Escanea para visitar esta página</p>
+                <div id="qrcode" class="d-flex justify-content-center"></div>
+            </div>
+            <div class="toast-copy d-none" id="toastCopy">
+                <i class="fas fa-check-circle me-2" style="color: #10b981;"></i> Link copiado al portapapeles
+            </div>
+        </div>
+    </div>
+</div>
