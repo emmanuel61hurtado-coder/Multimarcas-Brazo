@@ -125,23 +125,10 @@ def perfil():
     if request.method == 'POST':
 
         nombre = request.form.get('nombre_completo', '').strip()
-        email = request.form.get('email', '').strip()
         telefono = request.form.get('telefono', '').strip()
 
         if nombre:
             current_user.nombre_completo = nombre
-
-        if email:
-            existe = User.query.filter(
-                User.email == email,
-                User.id != current_user.id
-            ).first()
-
-            if existe:
-                flash('El correo ya está en uso.', 'danger')
-                return render_template('auth/perfil.html')
-
-            current_user.email = email
 
         if telefono:
             current_user.telefono = telefono
@@ -186,11 +173,10 @@ def recuperar_password():
         return redirect(url_for('home.index'))
 
     if request.method == 'POST':
-        email = request.form.get('email', '').strip()
-        user = User.query.filter_by(email=email).first()
+        username = request.form.get('username', '').strip()
+        user = User.query.filter_by(username=username).first()
         
-        # Siempre mostramos el mismo mensaje para no revelar qué emails están registrados
-        flash('Si el correo existe en nuestro sistema, recibirás instrucciones para restablecer tu contraseña.', 'info')
+        flash('Si el usuario existe en nuestro sistema, recibirás instrucciones para restablecer tu contraseña.', 'info')
         
         if user and user.activo:
             send_password_reset_email(user)

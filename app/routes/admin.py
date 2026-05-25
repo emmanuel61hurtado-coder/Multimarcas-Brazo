@@ -72,8 +72,7 @@ def usuarios():
         users = User.query.filter(
             User.rol == 'cliente',
             (User.nombre_completo.ilike(search)) | 
-            (User.username.ilike(search)) | 
-            (User.email.ilike(search))
+            (User.username.ilike(search))
         ).all()
     else:
         users = User.query.filter_by(rol='cliente').all()
@@ -90,8 +89,7 @@ def empleados():
         empleados = User.query.filter(
             User.rol.in_(['empleado', 'admin']),
             (User.nombre_completo.ilike(search)) | 
-            (User.username.ilike(search)) | 
-            (User.email.ilike(search))
+            (User.username.ilike(search))
         ).all()
     else:
         empleados = User.query.filter(User.rol.in_(['empleado', 'admin'])).all()

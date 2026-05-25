@@ -23,7 +23,7 @@
                         <i class="fas fa-search"></i>
                     </span>
                     <input type="text" name="q" class="form-input-brazo" 
-                           placeholder="Buscar por nombre, usuario o email..." 
+                           placeholder="Buscar por nombre o usuario..." 
                            value="{{ search_query or '' }}">
                 </div>
             </div>
@@ -147,10 +147,6 @@
                                 </div>
 
                                 <div class="card-brazo p-3 mb-4" style="background: rgba(255,255,255,0.02);">
-                                    <div class="mb-3">
-                                        <small class="text-muted d-block">EMAIL</small>
-                                        <span style="font-weight: 600;">{{ emp.email }}</span>
-                                    </div>
                                     <div class="mb-3">
                                         <small class="text-muted d-block">TELÉFONO</small>
                                         <span style="font-weight: 600;">{{ emp.telefono or 'No registrado' }}</span>
