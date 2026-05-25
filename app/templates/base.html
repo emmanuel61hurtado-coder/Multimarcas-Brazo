@@ -390,7 +390,7 @@
           </a>
           {% endif %}
           <!-- Cerrar sesion visible -->
-          <a href="{{ url_for('auth.logout') }}" class="nav-icon-link text-danger" title="Cerrar sesión">
+          <a href="{{ url_for('auth.logout') }}" class="nav-icon-link text-danger" title="Cerrar sesión" onclick="return confirm('¿Estás seguro de cerrar sesión?');">
             <i class="fas fa-power-off"></i>
           </a>
           <!-- Dropdown usuario -->
