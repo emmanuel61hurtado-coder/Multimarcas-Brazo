@@ -12,6 +12,8 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(200), nullable=False)
     rol = db.Column(db.String(20), default='cliente')
     activo = db.Column(db.Boolean, default=True)
+    pregunta_seguridad = db.Column(db.String(200))
+    respuesta_seguridad = db.Column(db.String(200))
 
     # relaciones
     motos = db.relationship('Moto', backref='propietario', lazy=True, cascade="all, delete-orphan")

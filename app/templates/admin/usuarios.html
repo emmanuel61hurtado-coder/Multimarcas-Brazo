@@ -78,17 +78,27 @@
                     </div>
                 </div>
 
-                <div class="mt-auto pt-3 d-flex gap-2 border-top border-secondary border-opacity-10">
+                <div class="mt-auto pt-3 d-flex gap-2 border-top border-secondary border-opacity-10 flex-wrap">
                     <a href="{{ url_for('admin.toggle_usuario', uid=user.id) }}" 
                        class="btn btn-sm {{ 'btn-outline-warning' if user.activo else 'btn-outline-success' }} flex-grow-1"
                        style="font-weight: 800; font-size: 11px;">
                         {{ 'DESACTIVAR' if user.activo else 'ACTIVAR' }}
                     </a>
+                    <button type="button" class="btn btn-sm btn-outline-info" style="font-size: 11px; font-weight: 700;"
+                            onclick="document.getElementById('resetPwd{{ user.id }}').classList.toggle('d-none');">
+                        <i class="fas fa-key"></i>
+                    </button>
                     <form action="{{ url_for('admin.eliminar_usuario', uid=user.id) }}" method="POST" style="margin:0;" 
                           onsubmit="return confirm('¿Eliminar a {{ user.username }}?');">
                         <button type="submit" class="btn btn-sm btn-outline-danger">
                             <i class="fas fa-trash-alt"></i>
                         </button>
+                    </form>
+                    <form id="resetPwd{{ user.id }}" action="{{ url_for('admin.admin_reset_password', uid=user.id) }}" method="POST" class="d-none w-100 mt-2">
+                        <div class="input-group input-group-sm">
+                            <input type="password" name="new_password" class="form-control form-control-sm bg-dark border-secondary text-light" placeholder="Nueva contraseña..." minlength="6" required>
+                            <button type="submit" class="btn btn-sm btn-warning">CAMBIAR</button>
+                        </div>
                     </form>
                 </div>
             </div>

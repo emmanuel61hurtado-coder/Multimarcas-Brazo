@@ -1,10 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, session
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db
 from app.models.user import User
-from app.utils.email import send_password_reset_email, verify_reset_token
+from app.utils.email import get_reset_token, verify_reset_token
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -85,6 +85,13 @@ def register():
             flash('El correo ya está registrado.', 'danger')
             return render_template('auth/register.html')
 
+        pregunta = request.form.get('pregunta_seguridad', '').strip()
+        respuesta = request.form.get('respuesta_seguridad', '').strip()
+
+        if not pregunta or not respuesta:
+            flash('Debes seleccionar una pregunta de seguridad y responderla.', 'danger')
+            return render_template('auth/register.html')
+
         user = User(
             nombre_completo=nombre,
             username=username,
@@ -92,7 +99,9 @@ def register():
             telefono=telefono,
             rol='cliente',
             password=generate_password_hash(password),
-            activo=True
+            activo=True,
+            pregunta_seguridad=pregunta,
+            respuesta_seguridad=respuesta
         )
 
         db.session.add(user)
@@ -175,15 +184,44 @@ def recuperar_password():
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         user = User.query.filter_by(username=username).first()
-        
-        flash('Si el usuario existe en nuestro sistema, recibirás instrucciones para restablecer tu contraseña.', 'info')
-        
-        if user and user.activo:
-            send_password_reset_email(user)
-            
-        return redirect(url_for('auth.login'))
+
+        if user and user.activo and user.pregunta_seguridad:
+            session['recovery_user_id'] = user.id
+            return redirect(url_for('auth.recuperar_pregunta'))
+
+        flash('Usuario no encontrado o sin pregunta de seguridad configurada.', 'danger')
+        return redirect(url_for('auth.recuperar_password'))
 
     return render_template('auth/recuperar.html')
+
+
+@auth_bp.route('/recuperar_password/pregunta', methods=['GET', 'POST'])
+def recuperar_pregunta():
+    if current_user.is_authenticated:
+        return redirect(url_for('home.index'))
+
+    user_id = session.get('recovery_user_id')
+    if not user_id:
+        flash('Debes iniciar la recuperación primero.', 'danger')
+        return redirect(url_for('auth.recuperar_password'))
+
+    user = User.query.get(user_id)
+    if not user or not user.activo or not user.pregunta_seguridad:
+        session.pop('recovery_user_id', None)
+        flash('Usuario inválido.', 'danger')
+        return redirect(url_for('auth.recuperar_password'))
+
+    if request.method == 'POST':
+        respuesta = request.form.get('respuesta', '').strip().lower()
+        if respuesta == user.respuesta_seguridad.lower():
+            token = get_reset_token(user.id)
+            session.pop('recovery_user_id', None)
+            return redirect(url_for('auth.reset_password_with_token', token=token))
+
+        flash('Respuesta incorrecta. Intenta de nuevo.', 'danger')
+        return render_template('auth/recuperar_pregunta.html', pregunta=user.pregunta_seguridad)
+
+    return render_template('auth/recuperar_pregunta.html', pregunta=user.pregunta_seguridad)
 
 @auth_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password_with_token(token):

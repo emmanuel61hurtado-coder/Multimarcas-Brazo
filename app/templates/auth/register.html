@@ -43,6 +43,28 @@
           <button type="button" onclick="togglePwd('pwd2')" style="position:absolute;right:14px;top:38px;background:none;border:none;color:var(--text-muted);cursor:pointer;">👁</button>
         </div>
         <div class="col-12">
+          <hr class="border-secondary opacity-25">
+          <p class="small text-muted mb-2"><i class="fas fa-shield-alt me-1"></i> Pregunta de seguridad para recuperar tu cuenta</p>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-brazo">Pregunta Secreta</label>
+          <select name="pregunta_seguridad" class="form-input-brazo" required>
+            <option value="">Selecciona una pregunta...</option>
+            <option value="¿Cuál es el nombre de tu primera mascota?">¿Cuál es el nombre de tu primera mascota?</option>
+            <option value="¿Cuál es el nombre de tu mejor amigo de la infancia?">¿Cuál es el nombre de tu mejor amigo de la infancia?</option>
+            <option value="¿Cuál es tu película favorita?">¿Cuál es tu película favorita?</option>
+            <option value="¿Cómo se llamaba tu escuela primaria?">¿Cómo se llamaba tu escuela primaria?</option>
+            <option value="¿Cuál es tu comida favorita?">¿Cuál es tu comida favorita?</option>
+            <option value="¿Cuál es la marca de tu primera moto?">¿Cuál es la marca de tu primera moto?</option>
+            <option value="¿En qué ciudad naciste?">¿En qué ciudad naciste?</option>
+            <option value="¿Cuál es tu deporte favorito?">¿Cuál es tu deporte favorito?</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-brazo">Respuesta</label>
+          <input type="text" name="respuesta_seguridad" class="form-input-brazo" placeholder="Tu respuesta" required>
+        </div>
+        <div class="col-12">
           <button type="submit" class="btn-primary-brazo" style="width:100%;justify-content:center;">
             REGISTRARME
           </button>

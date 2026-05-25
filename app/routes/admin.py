@@ -106,6 +106,8 @@ def nuevo_empleado():
         email = request.form.get('email', '').strip()
         telefono = request.form.get('telefono', '').strip()
         password = request.form.get('password', '')
+        pregunta = request.form.get('pregunta_seguridad', '').strip()
+        respuesta = request.form.get('respuesta_seguridad', '').strip()
 
         if not all([nombre, username, email, password]):
             flash('Todos los campos son obligatorios.', 'danger')
@@ -125,7 +127,9 @@ def nuevo_empleado():
             email=email,
             telefono=telefono,
             rol='empleado',
-            password=generate_password_hash(password)
+            password=generate_password_hash(password),
+            pregunta_seguridad=pregunta or None,
+            respuesta_seguridad=respuesta or None
         )
 
         db.session.add(emp)
@@ -147,6 +151,20 @@ def cambiar_rol(uid):
         db.session.commit()
         flash(f'Rol de {user.nombre_completo} actualizado a {nuevo_rol}.', 'success')
 
+    return redirect(request.referrer or url_for('admin.usuarios'))
+
+@admin_bp.route('/usuario/<int:uid>/reset_password', methods=['POST'])
+@login_required
+@admin_required
+def admin_reset_password(uid):
+    user = User.query.get_or_404(uid)
+    new_pass = request.form.get('new_password', '')
+    if len(new_pass) < 6:
+        flash('La contraseña debe tener al menos 6 caracteres.', 'danger')
+    else:
+        user.password = generate_password_hash(new_pass)
+        db.session.commit()
+        flash(f'Contraseña de {user.username} restablecida exitosamente.', 'success')
     return redirect(request.referrer or url_for('admin.usuarios'))
 
 @admin_bp.route('/usuario/<int:uid>/toggle')

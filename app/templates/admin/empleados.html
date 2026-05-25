@@ -176,6 +176,15 @@
                                     <a href="{{ url_for('admin.toggle_usuario', uid=emp.id) }}" class="btn-outline-brazo btn-sm-brazo w-100 mb-2" style="justify-content: center;">
                                         {{ 'DESACTIVAR ACCESO' if emp.activo else 'ACTIVAR ACCESO' }}
                                     </a>
+                                    <button type="button" onclick="document.getElementById('resetPwd{{ emp.id }}').classList.toggle('d-none');" class="btn-outline-brazo btn-sm-brazo w-100 mb-2" style="justify-content: center; border-color: rgba(255,193,7,0.3); color: #ffc107;">
+                                        <i class="fas fa-key me-1"></i> CAMBIAR CONTRASEÑA
+                                    </button>
+                                    <form id="resetPwd{{ emp.id }}" action="{{ url_for('admin.admin_reset_password', uid=emp.id) }}" method="POST" class="d-none mb-2">
+                                        <div class="input-group input-group-sm">
+                                            <input type="password" name="new_password" class="form-input-brazo" placeholder="Nueva contraseña..." minlength="6" required>
+                                            <button type="submit" class="btn-primary-brazo btn-sm-brazo">CAMBIAR</button>
+                                        </div>
+                                    </form>
                                     {% if emp.username != 'admin' %}
                                     <form action="{{ url_for('admin.eliminar_usuario', uid=emp.id) }}" method="POST" onsubmit="return confirm('¿ELIMINAR MIEMBRO?');">
                                         <button type="submit" class="btn-primary-brazo btn-sm-brazo w-100" style="justify-content: center; background: #e74c3c;">ELIMINAR MIEMBRO</button>

@@ -35,7 +35,7 @@
                             <input type="text" name="username" class="form-input-brazo" placeholder="Ej: juanp01" required>
                         </div>
 
-                        <!-- Email -->
+                        <!-- Email (solo interno) -->
                         <div class="col-md-6">
                             <label class="form-label-brazo">Correo Electrónico *</label>
                             <input type="email" name="email" class="form-input-brazo" placeholder="ejemplo@brazo.com" required>
@@ -52,6 +52,30 @@
                             <label class="form-label-brazo">Contraseña Temporal *</label>
                             <input type="password" name="password" class="form-input-brazo" placeholder="********" required>
                             <small class="text-muted" style="font-size: 10px;">El empleado podrá cambiarla luego.</small>
+                        </div>
+
+                        <!-- Pregunta de seguridad -->
+                        <div class="col-12 mt-3">
+                            <hr class="border-secondary opacity-25">
+                            <p class="small text-muted mb-2"><i class="fas fa-shield-alt me-1"></i> Pregunta de seguridad (para recuperar contraseña)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-brazo">Pregunta Secreta</label>
+                            <select name="pregunta_seguridad" class="form-input-brazo">
+                                <option value="">Selecciona...</option>
+                                <option value="¿Cuál es el nombre de tu primera mascota?">¿Cuál es el nombre de tu primera mascota?</option>
+                                <option value="¿Cuál es el nombre de tu mejor amigo de la infancia?">¿Cuál es el nombre de tu mejor amigo de la infancia?</option>
+                                <option value="¿Cuál es tu película favorita?">¿Cuál es tu película favorita?</option>
+                                <option value="¿Cómo se llamaba tu escuela primaria?">¿Cómo se llamaba tu escuela primaria?</option>
+                                <option value="¿Cuál es tu comida favorita?">¿Cuál es tu comida favorita?</option>
+                                <option value="¿Cuál es la marca de tu primera moto?">¿Cuál es la marca de tu primera moto?</option>
+                                <option value="¿En qué ciudad naciste?">¿En qué ciudad naciste?</option>
+                                <option value="¿Cuál es tu deporte favorito?">¿Cuál es tu deporte favorito?</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-brazo">Respuesta</label>
+                            <input type="text" name="respuesta_seguridad" class="form-input-brazo" placeholder="Respuesta">
                         </div>
                     </div>
 
