@@ -577,8 +577,34 @@ def nueva_venta_fisica():
             # Descontar stock automáticamente (el admin registró la venta que ya ocurrió)
             rep.stock = max(0, rep.stock - cant)
 
+        # --- GENERAR FACTURA AUTOMÁTICA ---
+        ultima_factura = Factura.query.order_by(Factura.id.desc()).first()
+        nuevo_num_fac = f"FAC-{str(ultima_factura.id + 1).zfill(3)}" if ultima_factura else "FAC-001"
+
+        nueva_factura = Factura(
+            numero=nuevo_num_fac,
+            user_id=uid,
+            empleado_id=current_user.id,
+            metodo_pago=metodo_pago,
+            subtotal=total,
+            iva=0.0,
+            total=total,
+            visible_cliente=True
+        )
+
+        for rep, cant, st in items_venta:
+            detalle_fac = DetalleFactura(
+                descripcion=rep.nombre,
+                cantidad=cant,
+                precio_unitario=rep.precio,
+                subtotal=st
+            )
+            nueva_factura.items.append(detalle_fac)
+
+        db.session.add(nueva_factura)
+
         db.session.commit()
-        flash(f'Venta física registrada por $ {total:,.0f}. Stock actualizado.', 'success')
+        flash(f'Venta física registrada por $ {total:,.0f}. Factura {nuevo_num_fac} generada. Stock actualizado.', 'success')
         return redirect(url_for('admin.pedidos'))
 
     return render_template('admin/venta_fisica.html', clientes=clientes, repuestos=repuestos)

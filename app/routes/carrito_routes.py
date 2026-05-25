@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from app import db
 from app.models.repuesto import Repuesto
 from app.models.pedido import Pedido, DetallePedido
+from app.models.factura import Factura, DetalleFactura
 
 carrito_bp = Blueprint('carrito', __name__)
 
@@ -137,13 +138,38 @@ def checkout():
             )
             db.session.add(detalle)
             rep.stock = max(0, rep.stock - cant)
-            
+
+        # --- GENERAR FACTURA AUTOMÁTICA ---
+        ultima_factura = Factura.query.order_by(Factura.id.desc()).first()
+        nuevo_num = f"FAC-{str(ultima_factura.id + 1).zfill(3)}" if ultima_factura else "FAC-001"
+
+        nueva_factura = Factura(
+            numero=nuevo_num,
+            user_id=current_user.id,
+            metodo_pago='Pendiente (Pedido Web)',
+            subtotal=total,
+            iva=0.0,
+            total=total,
+            visible_cliente=True
+        )
+
+        for rep, cant, st in items_pedido:
+            detalle_fac = DetalleFactura(
+                descripcion=rep.nombre,
+                cantidad=cant,
+                precio_unitario=rep.precio,
+                subtotal=st
+            )
+            nueva_factura.items.append(detalle_fac)
+
+        db.session.add(nueva_factura)
+
         db.session.commit()
         
         # Limpiar carrito
         session.pop('carrito', None)
         
-        flash('¡Pedido realizado con éxito! Nos pondremos en contacto para el pago.', 'success')
+        flash(f'¡Pedido realizado con éxito! Factura {nuevo_num} generada. Nos pondremos en contacto para el pago.', 'success')
         return redirect(url_for('cliente.mis_pedidos'))
         
     return redirect(url_for('carrito.ver_carrito'))
