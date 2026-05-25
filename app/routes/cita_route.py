@@ -120,18 +120,55 @@ def editar(cid):
     if request.method == 'POST':
         fecha_str = request.form.get('fecha')
         hora_str = request.form.get('hora')
+        moto_id = request.form.get('moto_id')
 
         if not fecha_str or not hora_str:
             flash('Fecha y hora son obligatorias.', 'danger')
             return render_template('citas/editar.html', cita=cita, motos=motos)
 
+        # Validar y actualizar moto_id si es diferente
+        if moto_id:
+            moto = Moto.query.filter_by(id=moto_id, user_id=cita.user_id).first()
+            if not moto:
+                flash('La moto seleccionada no es válida o no te pertenece.', 'danger')
+                return render_template('citas/editar.html', cita=cita, motos=motos)
+            cita.moto_id = moto.id
+
         cita.tipo_servicio = request.form.get('tipo_servicio', cita.tipo_servicio)
         cita.descripcion = request.form.get('descripcion', cita.descripcion)
 
         try:
-            cita.fecha = datetime.strptime(fecha_str, '%Y-%m-%d')
+            fecha_hora_str = f"{fecha_str} {hora_str}"
+            fecha_dt = datetime.strptime(fecha_hora_str, '%Y-%m-%d %H:%M')
+            
+            # Validación de horario comercial
+            dia_semana = fecha_dt.weekday() # 0=Lunes, 6=Domingo
+            hora = fecha_dt.hour
+            minuto = fecha_dt.minute
+            
+            if dia_semana == 6: # Domingo
+                flash('No abrimos los domingos. Por favor selecciona un día de Lunes a Sábado.', 'warning')
+                return render_template('citas/editar.html', cita=cita, motos=motos)
+                
+            if hora < 8:
+                flash('El horario de atención comienza a las 8:00 AM.', 'warning')
+                return render_template('citas/editar.html', cita=cita, motos=motos)
+                
+            if dia_semana <= 4: # Lunes a Viernes
+                # Hasta las 17:00 (5 PM)
+                if hora > 17 or (hora == 17 and minuto > 0):
+                    flash('De Lunes a Viernes atendemos hasta las 5:00 PM.', 'warning')
+                    return render_template('citas/editar.html', cita=cita, motos=motos)
+            elif dia_semana == 5: # Sábado
+                # Hasta las 12:00 PM
+                if hora > 12 or (hora == 12 and minuto > 0):
+                    flash('Los Sábados solo atendemos hasta las 12:00 PM.', 'warning')
+                    return render_template('citas/editar.html', cita=cita, motos=motos)
+                    
+            cita.fecha = fecha_dt
             cita.hora = datetime.strptime(hora_str, '%H:%M').time()
-        except (ValueError, TypeError):
+            
+        except ValueError:
             flash('Fecha u hora inválida.', 'danger')
             return render_template('citas/editar.html', cita=cita, motos=motos)
 
