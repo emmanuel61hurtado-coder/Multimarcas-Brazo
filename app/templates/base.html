@@ -32,48 +32,6 @@
   {% block extra_css %}{% endblock %}
 
   <style>
-    .logout-fixed {
-        position: fixed;
-        top: 75px;
-        right: 20px;
-        z-index: 10001;
-    }
-
-    .btn-logout-racer {
-        background: var(--red);
-        color: white;
-        padding: 6px 15px;
-        font-family: var(--font-display);
-        font-weight: 900;
-        font-size: 12px;
-        text-transform: uppercase;
-        text-decoration: none;
-        font-style: italic;
-        transform: var(--racer-skew);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        border: none;
-        box-shadow: -3px 3px 0 var(--red-dark);
-        transition: 0.2s;
-    }
-
-    .btn-logout-racer:hover {
-        background: white;
-        color: var(--red);
-        transform: var(--racer-skew) translate(1px, -1px);
-        box-shadow: -5px 5px 0 var(--red-glow);
-    }
-
-    @media (max-width: 1100px) {
-        .logout-fixed { top: auto; bottom: 80px; right: 10px; }
-        .btn-logout-racer { font-size: 10px; padding: 4px 10px; }
-    }
-    @media (max-width: 575px) {
-        .logout-fixed { bottom: 70px; right: 8px; }
-        .btn-logout-racer { font-size: 9px; padding: 3px 8px; gap: 4px; }
-    }
-
     /* 🏎️ ULTRA-PREMIUM HUD NAVBAR */
     .navbar {
         background: var(--bg-nav) !important;
@@ -333,15 +291,6 @@
 
 <body>
 
-<!-- 🚪 CERRAR SESIÓN FIJO (PARA TODOS) -->
-{% if current_user.is_authenticated %}
-<div class="logout-fixed">
-    <a href="{{ url_for('auth.logout') }}" class="btn-logout-racer">
-        <i class="fas fa-power-off"></i> CERRAR SESIÓN
-    </a>
-</div>
-{% endif %}
-
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg">
   <div class="container">
@@ -419,11 +368,16 @@
         updateClock();
       </script>
 
-      <!-- USER -->
-      <div class="ms-auto d-flex align-items-center gap-3">
+      <!-- SOCIAL + USER -->
+      <div class="ms-auto d-flex align-items-center gap-2">
+        <!-- Redes sociales -->
+        <a href="https://wa.me/573204545930" target="_blank" class="nav-social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://www.facebook.com/share/1CCzv4MGuq/" target="_blank" class="nav-social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/multimarcasbrazo_61?igsh=MTN1dHdnaW9tdGtybA==" target="_blank" class="nav-social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <div class="nav-social-divider"></div>
         {% if current_user.is_authenticated %}
           {% if not current_user.is_admin() and not current_user.is_empleado() %}
-          <a href="{{ url_for('carrito.ver_carrito') }}" class="nav-link position-relative me-3" title="Carrito">
+          <a href="{{ url_for('carrito.ver_carrito') }}" class="nav-link position-relative" title="Carrito">
             <i class="fas fa-shopping-cart" style="font-size: 1.2rem;"></i>
             {% if session.get('carrito') %}
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
@@ -502,42 +456,6 @@
         color: var(--red);
         opacity: 1;
     }
-    .social-hud-float {
-        position: fixed;
-        top: 120px;
-        right: 25px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        z-index: 10000;
-    }
-
-    .social-hud-icon {
-        width: 50px;
-        height: 50px;
-        background: rgba(10, 10, 12, 0.8);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-right: 3px solid var(--red);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 24px;
-        text-decoration: none;
-        transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: -10px 10px 20px rgba(0,0,0,0.5);
-    }
-
-    .social-hud-icon:hover {
-        width: 60px;
-        background: var(--red);
-        color: white;
-        border-color: white;
-        box-shadow: 0 0 25px var(--red-glow);
-        transform: translateX(-5px);
-    }
-
     .footer-divider {
         width: 100px;
         height: 2px;
@@ -546,19 +464,48 @@
     }
 
     @media (max-width: 991px) {
-        .theme-toggle { top: auto; bottom: 140px; right: 20px; width: 38px; height: 38px; font-size: 15px; }
-        .social-hud-float { top: auto; bottom: 30px; right: 20px; flex-direction: row; gap: 10px; }
-        .social-hud-icon { width: 40px; height: 40px; font-size: 18px; }
+        .theme-toggle { bottom: 90px; right: 15px; width: 38px; height: 38px; font-size: 15px; }
     }
     @media (max-width: 575px) {
-        .theme-toggle { bottom: 130px; right: 14px; width: 34px; height: 34px; font-size: 13px; }
-        .social-hud-float { bottom: 20px; right: 14px; gap: 8px; }
-        .social-hud-icon { width: 36px; height: 36px; font-size: 16px; }
+        .theme-toggle { bottom: 80px; right: 10px; width: 34px; height: 34px; font-size: 13px; }
     }
     @media (max-width: 399px) {
-        .theme-toggle { bottom: 120px; width: 30px; height: 30px; font-size: 12px; }
-        .social-hud-float { gap: 6px; }
-        .social-hud-icon { width: 32px; height: 32px; font-size: 14px; }
+        .theme-toggle { bottom: 75px; width: 30px; height: 30px; font-size: 12px; }
+    }
+
+    /* Redes sociales en navbar */
+    .nav-social-link {
+        color: var(--text-muted);
+        font-size: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        text-decoration: none;
+        transition: 0.25s;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid transparent;
+    }
+
+    .nav-social-link:hover {
+        color: white;
+        background: var(--red);
+        border-color: var(--red);
+        box-shadow: 0 0 12px var(--red-glow);
+        transform: translateY(-2px);
+    }
+
+    [data-theme="light"] .nav-social-link:hover {
+        color: white;
+    }
+
+    .nav-social-divider {
+        width: 1px;
+        height: 24px;
+        background: var(--border);
+        margin: 0 6px;
     }
 
     /* 📤 COMPARTIR WIDGET */
@@ -751,19 +698,6 @@
 
 <!-- Botón de Tema Flotante -->
 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Cambiar modo">🌙</button>
-
-<!-- SOCIALS FLOATING (TOP RIGHT) -->
-<div class="social-hud-float">
-    <a href="https://wa.me/573204545930" target="_blank" class="social-hud-icon whatsapp" title="WhatsApp">
-      <i class="fab fa-whatsapp"></i>
-    </a>
-    <a href="https://www.facebook.com/share/1CCzv4MGuq/" target="_blank" class="social-hud-icon facebook" title="Facebook">
-      <i class="fab fa-facebook-f"></i>
-    </a>
-    <a href="https://www.instagram.com/multimarcasbrazo_61?igsh=MTN1dHdnaW9tdGtybA==" target="_blank" class="social-hud-icon instagram" title="Instagram">
-      <i class="fab fa-instagram"></i>
-    </a>
-</div>
 
 <!-- SHARE WIDGET -->
 {% include 'components/share.html' %}
