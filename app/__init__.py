@@ -118,21 +118,29 @@ def create_app():
         # Autoseed de repuestos
         from app.models.repuesto import Repuesto
         try:
-            if Repuesto.query.count() == 0:
-                print("[INFO] El inventario de repuestos está vacío. Iniciando autoseed...")
+            # Si el catálogo básico no está cargado (por ejemplo, si falta el primer repuesto)
+            key_product = "Aceite 100% Sintético 7100 10W40 4T"
+            if not Repuesto.query.filter_by(nombre=key_product).first():
+                print("[INFO] El catálogo de repuestos no está sembrado. Iniciando autoseed...")
                 from app.utils.repuestos_seed_data import repuestos_data
+                existing_names = {r.nombre for r in Repuesto.query.with_entities(Repuesto.nombre).all()}
+                
+                agregados = 0
                 for nombre, cat, marca, precio, stock, desc in repuestos_data:
-                    nuevo = Repuesto(
-                        nombre=nombre,
-                        categoria=cat,
-                        marca=marca,
-                        precio=precio,
-                        stock=stock,
-                        descripcion=desc
-                    )
-                    db.session.add(nuevo)
-                db.session.commit()
-                print(f"[OK] Se sembraron {len(repuestos_data)} repuestos automáticamente.")
+                    if nombre not in existing_names:
+                        nuevo = Repuesto(
+                            nombre=nombre,
+                            categoria=cat,
+                            marca=marca,
+                            precio=precio,
+                            stock=stock,
+                            descripcion=desc
+                        )
+                        db.session.add(nuevo)
+                        agregados += 1
+                if agregados > 0:
+                    db.session.commit()
+                    print(f"[OK] Se sembraron {agregados} repuestos automáticamente.")
         except Exception as e:
             print(f"[ERROR] No se pudo sembrar los repuestos: {str(e)}")
 
