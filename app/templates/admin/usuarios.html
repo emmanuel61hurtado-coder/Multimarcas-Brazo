@@ -53,33 +53,34 @@
             {% set user_card_style = 'style="border-top: 3px solid ' ~ user_color ~ ';"' %}
             {% set user_icon_style = 'style="width: 50px; height: 50px; background: ' ~ user_bg ~ '; color: ' ~ user_text_color ~ '; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; transform: skewX(-10deg);"' %}
             <div class="card-brazo p-4 h-100 position-relative overflow-hidden" {{ user_card_style | safe }}>
-                <div class="d-flex align-items-center gap-3 mb-4">
-                    <div {{ user_icon_style | safe }}>
-                        {{ user.nombre_completo[:1].upper() }}
+                <div data-bs-toggle="modal" data-bs-target="#detalleUsuarioModal-{{ user.id }}" style="cursor: pointer;">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div {{ user_icon_style | safe }}>
+                            {{ user.nombre_completo[:1].upper() }}
+                        </div>
+                        <div class="overflow-hidden">
+                            <h4 style="font-family: var(--font-display); font-weight: 900; margin: 0; font-style: italic; transform: var(--racer-skew); color: var(--text); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                {{ user.nombre_completo }}
+                            </h4>
+                            <code style="color: var(--red);">@{{ user.username }}</code>
+                        </div>
                     </div>
-                    <div class="overflow-hidden">
-                        <h4 style="font-family: var(--font-display); font-weight: 900; margin: 0; font-style: italic; transform: var(--racer-skew); color: var(--text); white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                            {{ user.nombre_completo }}
-                        </h4>
-                        <code style="color: var(--red);">@{{ user.username }}</code>
-                    </div>
-                </div>
 
-                <div class="mb-4" style="font-size: 13px; color: var(--text-muted);">
-                    <div class="mb-2"><i class="fas fa-phone" style="width: 20px; color: var(--red);"></i> {{ user.telefono or 'Sin teléfono' }}</div>
-                    <div class="mb-2">
-                        <i class="fas fa-shield-alt" style="width: 20px; color: var(--red);"></i> ROL: 
-                        <span class="badge {{ 'bg-danger' if user.rol == 'admin' else 'bg-secondary' }}" style="font-size: 9px; transform: skewX(-10deg);">{{ user.rol | upper }}</span>
-                    </div>
-                    <div>
-                        {% set status_icon_style = 'style="width: 20px; color: ' ~ status_color ~ ';"' %}
-                        <i class="fas fa-circle" {{ status_icon_style | safe }}></i> 
-                        ESTADO: <b style="color: var(--text);">{{ 'ACTIVO' if user.activo else 'INACTIVO' }}</b>
+                    <div class="mb-4" style="font-size: 13px; color: var(--text-muted);">
+                        <div class="mb-2"><i class="fas fa-phone" style="width: 20px; color: var(--red);"></i> {{ user.telefono or 'Sin teléfono' }}</div>
+                        <div class="mb-2">
+                            <i class="fas fa-shield-alt" style="width: 20px; color: var(--red);"></i> ROL: 
+                            <span class="badge {{ 'bg-danger' if user.rol == 'admin' else 'bg-secondary' }}" style="font-size: 9px; transform: skewX(-10deg);">{{ user.rol | upper }}</span>
+                        </div>
+                        <div>
+                            {% set status_icon_style = 'style="width: 20px; color: ' ~ status_color ~ ';"' %}
+                            <i class="fas fa-circle" {{ status_icon_style | safe }}></i> 
+                            ESTADO: <b style="color: var(--text);">{{ 'ACTIVO' if user.activo else 'INACTIVO' }}</b>
+                        </div>
                     </div>
                 </div>
 
                 <div class="mt-auto pt-3 d-flex gap-2 border-top border-secondary border-opacity-10 flex-wrap">
-                    <button class="btn btn-sm btn-outline-light" style="font-size: 11px;" data-bs-toggle="modal" data-bs-target="#detalleUsuarioModal-{{ user.id }}">
                         <i class="fas fa-eye"></i>
                     </button>
                     <a href="{{ url_for('admin.toggle_usuario', uid=user.id) }}" 

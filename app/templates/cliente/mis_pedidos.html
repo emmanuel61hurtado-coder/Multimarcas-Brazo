@@ -16,7 +16,7 @@
     <div class="row g-4">
         {% for pedido in pedidos %}
         <div class="col-md-6 col-lg-4">
-            <div class="card-brazo p-4 shadow-sm h-100" style="border-radius: 20px; border-left: 5px solid {% if pedido.estado == 'Pendiente' %}var(--accent){% elif pedido.estado == 'Completado' %}#2ecc71{% else %}var(--red){% endif %};">
+            <div class="card-brazo p-4 shadow-sm h-100" style="border-radius: 20px; border-left: 5px solid {% if pedido.estado == 'Pendiente' %}var(--accent){% elif pedido.estado == 'Completado' %}#2ecc71{% else %}var(--red){% endif %}; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#detalleModal-{{ pedido.id }}">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
                         <span class="text-muted small">ID #{{ pedido.id }}</span>
@@ -50,9 +50,6 @@
                     <div style="font-size: 0.8rem;">{{ pedido.direccion_envio }}</div>
                 </div>
                 {% endif %}
-                <button class="btn btn-sm btn-outline-light w-100 mt-3" style="font-size: 10px; letter-spacing: 1px;" data-bs-toggle="modal" data-bs-target="#detalleModal-{{ pedido.id }}">
-                    <i class="fas fa-eye me-1"></i> VER DETALLE
-                </button>
             </div>
         </div>
 
