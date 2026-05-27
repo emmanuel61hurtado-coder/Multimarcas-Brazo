@@ -105,6 +105,10 @@
 
       <!-- BOTONES DE ACCIÓN DINÁMICOS -->
       <div style="display:flex; gap:10px; width:100%; margin-top:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
+
+          <button class="btn-nav-action" style="flex:1; background:transparent; border-color:var(--border); padding:8px; font-size:12px; text-align:center; letter-spacing:1px;" data-bs-toggle="modal" data-bs-target="#detalleCitaModal-{{ cita.id }}">
+              <i class="fas fa-eye"></i> DETALLE
+          </button>
           
           {% if cita.estado == 'pendiente' %}
             <a href="{{ url_for('citas.editar', cid=cita.id) }}" class="btn-nav-action" style="flex:1; background:#3498db; border-color:#2980b9; padding:8px; font-size:14px; text-align:center;">
@@ -127,6 +131,86 @@
 
       </div>
 
+    </div>
+
+    <!-- MODAL DETALLE CITA -->
+    <div class="modal fade" id="detalleCitaModal-{{ cita.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content" style="background: var(--bg-card2); border: 1px solid var(--border); border-radius: 16px;">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <span class="badge bg-dark border border-secondary text-white" style="font-size: 14px;">CITA #{{ cita.id }}</span>
+                        <span class="text-muted ms-2" style="font-size: 12px;">{{ cita.created_at.strftime('%d/%m/%Y') if cita.created_at else '' }}</span>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Estado -->
+                    <div class="mb-4">
+                        {% set clase_estado = 'bg-success' %}
+                        {% if cita.estado == 'pendiente' %}
+                            {% set clase_estado = 'bg-warning text-dark' %}
+                        {% elif cita.estado == 'cancelada' %}
+                            {% set clase_estado = 'bg-danger' %}
+                        {% endif %}
+                        <span class="badge {{ clase_estado }}" style="font-size: 11px; padding: 6px 14px;">{{ cita.estado | upper }}</span>
+                    </div>
+
+                    <!-- Fecha y Hora -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="p-3 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                                <h6 class="small text-muted mb-1 text-uppercase" style="letter-spacing: 1px; font-size: 9px;">Fecha</h6>
+                                <div style="font-size: 14px;">{{ cita.fecha.strftime('%d/%m/%Y') if cita.fecha else '—' }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                                <h6 class="small text-muted mb-1 text-uppercase" style="letter-spacing: 1px; font-size: 9px;">Hora</h6>
+                                <div style="font-size: 14px;">{{ cita.hora.strftime('%H:%M') if cita.hora else '—' }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Moto -->
+                    <div class="mb-4 p-3 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                        <h6 class="small text-muted mb-2 text-uppercase" style="letter-spacing: 1px; font-size: 9px;">Motocicleta</h6>
+                        <div style="font-size: 14px;">
+                            <div><strong>{{ cita.moto.marca }} {{ cita.moto.modelo }}</strong></div>
+                            <div class="text-muted">Placa: {{ cita.moto.placa }}</div>
+                            {% if cita.moto.año %}<div class="text-muted">Año: {{ cita.moto.año }}</div>{% endif %}
+                            {% if cita.moto.color %}<div class="text-muted">Color: {{ cita.moto.color }}</div>{% endif %}
+                            {% if cita.moto.cilindraje %}<div class="text-muted">Cilindraje: {{ cita.moto.cilindraje }}</div>{% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Servicio -->
+                    <div class="mb-4 p-3 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                        <h6 class="small text-muted mb-2 text-uppercase" style="letter-spacing: 1px; font-size: 9px;">Servicio</h6>
+                        <div style="font-size: 14px;">
+                            <div><strong>{{ cita.tipo_servicio }}</strong></div>
+                            {% if cita.descripcion %}
+                            <div class="text-muted mt-1" style="font-size: 13px;">{{ cita.descripcion }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Cliente -->
+                    <div class="mb-4 p-3 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                        <h6 class="small text-muted mb-2 text-uppercase" style="letter-spacing: 1px; font-size: 9px;">Cliente</h6>
+                        <div style="font-size: 14px;">
+                            <div><strong>{{ cita.cliente.nombre_completo }}</strong></div>
+                            <div class="text-muted">Tel: {{ cita.cliente.telefono or '—' }}</div>
+                            <div class="text-muted" style="font-size: 12px;">@{{ cita.cliente.username }}</div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-outline-light btn-sm" style="border-radius: 50px; padding: 6px 24px; font-size: 12px;" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
     </div>
     {% endfor %}
   </div>

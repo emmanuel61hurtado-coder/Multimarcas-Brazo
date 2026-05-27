@@ -42,6 +42,8 @@
   --badge-confirmed: rgba(0,200,100,0.15);
   --badge-completed: rgba(100,150,255,0.15);
   --badge-cancelled: rgba(255,50,50,0.15);
+  --bs-modal-bg: var(--bg-card2);
+  --bs-modal-border-color: var(--border);
 }
 
 /* LIGHT MODE */
@@ -69,6 +71,8 @@
   --badge-cancelled: rgba(220,40,40,0.12);
   --shadow: 0 10px 40px rgba(0,0,0,0.4);
   --racer-glow: 0 0 20px var(--red-glow);
+  --bs-modal-bg: var(--bg-card2);
+  --bs-modal-border-color: var(--border);
 }
 
 /* 🏎️ ANIMACIONES RACER */
