@@ -79,6 +79,9 @@
                 </div>
 
                 <div class="mt-auto pt-3 d-flex gap-2 border-top border-secondary border-opacity-10 flex-wrap">
+                    <button class="btn btn-sm btn-outline-light" style="font-size: 11px;" data-bs-toggle="modal" data-bs-target="#detalleUsuarioModal-{{ user.id }}">
+                        <i class="fas fa-eye"></i>
+                    </button>
                     <a href="{{ url_for('admin.toggle_usuario', uid=user.id) }}" 
                        class="btn btn-sm {{ 'btn-outline-warning' if user.activo else 'btn-outline-success' }} flex-grow-1"
                        style="font-weight: 800; font-size: 11px;">
@@ -100,6 +103,85 @@
                             <button type="submit" class="btn btn-sm btn-warning">CAMBIAR</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DETALLE USUARIO -->
+        <div class="modal fade" id="detalleUsuarioModal-{{ user.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content" style="background: var(--bg-card2); border: 1px solid var(--border); border-radius: 16px;">
+                    <div class="modal-header border-0 pb-0">
+                        <div>
+                            <span class="badge bg-dark border border-secondary text-white" style="font-size: 14px;">@{{ user.username }}</span>
+                            <span class="text-muted ms-2" style="font-size: 12px;">ID #{{ user.id }}</span>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Nombre + estado -->
+                        <div class="d-flex align-items-center gap-3 mb-4">
+                            <div style="width: 50px; height: 50px; background: {{ user_bg }}; color: {{ user_text_color }}; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; transform: skewX(-10deg);">
+                                {{ user.nombre_completo[:1].upper() }}
+                            </div>
+                            <div>
+                                <h4 style="font-family: var(--font-display); font-weight: 900; margin: 0; font-style: italic; color: var(--text);">{{ user.nombre_completo }}</h4>
+                                <div>
+                                    <span class="badge {{ 'bg-danger' if user.rol == 'admin' else 'bg-secondary' }}" style="font-size: 9px; transform: skewX(-10deg);">{{ user.rol | upper }}</span>
+                                    <span class="badge {{ 'bg-success' if user.activo else 'bg-secondary' }}" style="font-size: 9px;">{{ 'ACTIVO' if user.activo else 'INACTIVO' }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info personal -->
+                        <div class="mb-4 p-3 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                            <h6 class="small text-muted mb-2 text-uppercase" style="letter-spacing: 1px; font-size: 9px;">Información Personal</h6>
+                            <div style="font-size: 14px;">
+                                <div class="mb-2"><i class="fas fa-phone" style="width: 20px; color: var(--red);"></i> {{ user.telefono or 'Sin teléfono' }}</div>
+                                {% if user.pregunta_seguridad %}
+                                <div class="mb-2"><i class="fas fa-shield-alt" style="width: 20px; color: var(--red);"></i> Pregunta de seguridad: <span class="text-muted">{{ user.pregunta_seguridad }}</span></div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Estadísticas -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-4">
+                                <div class="p-3 rounded text-center" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                                    <div style="font-family: var(--font-display); font-size: 22px; font-weight: 900; color: var(--red);">{{ user.motos | length }}</div>
+                                    <small class="text-muted" style="font-size: 8px; letter-spacing: 1px;">MOTOS</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 rounded text-center" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                                    <div style="font-family: var(--font-display); font-size: 22px; font-weight: 900; color: var(--accent);">{{ user.citas | length }}</div>
+                                    <small class="text-muted" style="font-size: 8px; letter-spacing: 1px;">CITAS</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 rounded text-center" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border);">
+                                    <div style="font-family: var(--font-display); font-size: 22px; font-weight: 900; color: #00ff88;">{{ user.pedidos | length }}</div>
+                                    <small class="text-muted" style="font-size: 8px; letter-spacing: 1px;">PEDIDOS</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Motos del usuario -->
+                        {% if user.motos %}
+                        <h6 class="small text-muted mb-2 text-uppercase" style="letter-spacing: 1px; font-size: 9px;">Vehículos Registrados</h6>
+                        <div style="font-size: 13px;">
+                            {% for m in user.motos %}
+                            <div class="d-flex justify-content-between align-items-center p-2 rounded mb-1" style="background: rgba(255,255,255,0.03);">
+                                <span><strong>{{ m.marca }} {{ m.modelo }}</strong> — {{ m.placa }}</span>
+                                <span class="text-muted" style="font-size: 11px;">{{ m.citas | length }} servicios</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-light btn-sm" style="border-radius: 50px; padding: 6px 24px; font-size: 12px;" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>
