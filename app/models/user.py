@@ -19,6 +19,9 @@ class User(UserMixin, db.Model):
     motos = db.relationship('Moto', backref='propietario', lazy=True, cascade="all, delete-orphan")
     citas = db.relationship('Cita', backref='cliente', lazy=True, cascade="all, delete-orphan")
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def is_admin(self):
         return self.rol == 'admin'
 

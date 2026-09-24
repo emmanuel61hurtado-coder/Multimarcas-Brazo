@@ -18,6 +18,9 @@ class Pedido(db.Model):
     user = db.relationship('User', backref='pedidos')
     items = db.relationship('DetallePedido', backref='pedido', cascade='all, delete-orphan')
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def __repr__(self):
         return f'<Pedido {self.id} - {self.estado}>'
 
@@ -32,6 +35,9 @@ class DetallePedido(db.Model):
 
     # Relaciones
     repuesto = db.relationship('Repuesto')
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
     def __repr__(self):
         return f'<DetallePedido {self.id} - {self.cantidad} unidades>'

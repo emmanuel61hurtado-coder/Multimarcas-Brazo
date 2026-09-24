@@ -16,5 +16,8 @@ class Moto(db.Model):
     # relación inversa (ya viene por User.motos)
     citas = db.relationship('Cita', backref='moto', lazy=True, cascade="all, delete-orphan")
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def __repr__(self):
         return f'<Moto {self.marca} {self.modelo} - {self.placa}>'

@@ -19,5 +19,8 @@ class Cita(db.Model):
     estado = db.Column(db.String(20), default="pendiente")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def __repr__(self):
         return f'<Cita {self.fecha} - {self.estado}>'

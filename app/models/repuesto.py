@@ -10,5 +10,8 @@ class Repuesto(db.Model):
     stock = db.Column(db.Integer, default=0)
     descripcion = db.Column(db.Text)
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def __repr__(self):
         return f'<Repuesto {self.nombre}>'

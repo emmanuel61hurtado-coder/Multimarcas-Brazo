@@ -11,3 +11,6 @@ class Trabajo(db.Model):
     costo = db.Column(db.Float)
 
     cita_id = db.Column(db.Integer, db.ForeignKey('citas.id'))
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

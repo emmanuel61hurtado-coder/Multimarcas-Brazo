@@ -35,6 +35,9 @@ class Factura(db.Model):
     
     items = db.relationship('DetalleFactura', backref='factura', lazy=True, cascade="all, delete-orphan")
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
 class DetalleFactura(db.Model):
     __tablename__ = 'detalle_facturas'
 
@@ -45,3 +48,6 @@ class DetalleFactura(db.Model):
     cantidad = db.Column(db.Integer, default=1)
     precio_unitario = db.Column(db.Float, nullable=False)
     subtotal = db.Column(db.Float, nullable=False)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
