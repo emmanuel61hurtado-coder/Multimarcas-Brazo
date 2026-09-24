@@ -111,4 +111,4 @@ def test_pedido_cascade_delete(app, user, sample_repuesto):
     db.session.delete(pedido)
     db.session.commit()
 
-    assert DetallePedido.query.get(detalle_id) is None
+    assert db.session.get(DetallePedido, detalle_id) is None

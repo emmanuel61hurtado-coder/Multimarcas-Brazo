@@ -104,4 +104,4 @@ def test_factura_cascade_delete(app, user):
     db.session.delete(factura)
     db.session.commit()
 
-    assert DetalleFactura.query.get(detalle_id) is None
+    assert db.session.get(DetalleFactura, detalle_id) is None
