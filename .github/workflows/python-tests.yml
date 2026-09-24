@@ -1,4 +1,5 @@
-name: Python Tests CI
+name: Pruebas Unitarias de Modelos (Pytest)
+run-name: Pruebas Unitarias - ${{ github.event.head_commit.message || 'Ejecución Manual' }}
 
 on:
   push:
@@ -9,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: Run Pytest Suite on Linux (${{ matrix.python-version }})
+    name: Pruebas Unitarias en Linux (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
 
     strategy:
